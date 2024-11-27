@@ -1,7 +1,4 @@
 from django.shortcuts import render
-
-# Create your views here.
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -16,9 +13,14 @@ class TransferDataView(APIView):
 
         # Insert data into datacollector_dummy
         for record in serializer.data:
-            MSISDNIMSI.objects.create(
-                MSISDN=record['MSISDN'],
-                IMSI=record['IMSI']
-            )
+            msisdn = record['MSISDN']
+            imsi = record['IMSI']
+
+            # Check if the combination of MSISDN and IMSI already exists
+            if not MSISDNIMSI.objects.filter(MSISDN=msisdn, IMSI=imsi).exists():
+                MSISDNIMSI.objects.create(
+                    MSISDN=msisdn,
+                    IMSI=imsi
+                )
 
         return Response({'message': 'Data transferred successfully!'}, status=status.HTTP_200_OK)

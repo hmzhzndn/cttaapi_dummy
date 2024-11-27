@@ -1,8 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
-
 # ctt_dummy database table
 class CaseTT(models.Model):
     CTT_ID = models.AutoField(primary_key=True)
@@ -24,3 +21,6 @@ class MSISDNIMSI(models.Model):
     class Meta:
         db_table = 'msisdn_imsi'
         managed = False  # Table already exists in datacollector_dummy database
+        constraints = [
+            models.UniqueConstraint(fields=['MSISDN', 'IMSI'], name='unique_msisdn_imsi')
+        ]
