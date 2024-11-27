@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, permissions
 from .models import CaseTT, MSISDNIMSI
 from .serializers import CaseTTSerializer, MSISDNIMSISerializer
 
 class TransferDataView(APIView):
+    permission_classes = [permissions.IsAuthenticated]  # Restrict access to authenticated users
+
     def get(self, request):
         # Fetch data from ctt_dummy
         case_data = CaseTT.objects.all()
